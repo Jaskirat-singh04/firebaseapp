@@ -1,0 +1,55 @@
+/* customer.css */
+body{
+  background: rgb(141,194,111);
+}
+/* Reset some default styles for tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  background: #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Style the header */
+.header {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Style the logout button */
+#logout-button {
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#logout-button:hover {
+  background-color: #ff473f;
+}
+
+/* Style the delete button */
+button[data-id] {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+button[data-id]:hover {
+  background-color: #d32f2f;
+}

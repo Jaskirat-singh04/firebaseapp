@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="details.js"></script>
+</head>
+<body>
+  <div class="login-page">
+  <div class="form">
+  <h1>Add Customer Details</h1>
+  <form id="customer-form">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" required>
+    <br>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" required>
+    <br>
+    <!-- Add more input fields for other customer details -->
+    <label for="street">Street:</label>
+    <input type="text" id="street" required>
+    <br>
+    <label for="address">Address:</label>
+    <input type="text" id="address" required>
+    <br>
+    <label for="city">City:</label>
+    <input type="text" id="city" required>
+    <br>
+    <label for="state">State:</label>
+    <input type="text" id="state" required>
+    <br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <br>
+    <label for="phone">Phone:</label>
+    <input type="tel" id="phone" required>
+    <br>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+</div>
+</div>
+
+  <!-- <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+
+  <script>
+    // Your Firebase config
+    firebase.initializeApp({
+        apiKey: "AIzaSyC0xho1jzMKqvFZ4hF8bjctwdxvvxAhwzA",
+      authDomain: "authentication-3ca51.firebaseapp.com",
+      databaseURL: "https://authentication-3ca51-default-rtdb.firebaseio.com",
+      projectId: "authentication-3ca51",
+      storageBucket: "authentication-3ca51.appspot.com",
+      messagingSenderId: "424375942298",
+      appId: "1:424375942298:web:ebc8a196753b7328407323"
+    });
+
+    // Check if user is authenticated, otherwise redirect to login page
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = 'login.html'; // Redirect to login page
+      }
+    });
+
+    const customerForm = document.getElementById('customer-form');
+
+    customerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('Submit button clicked.'); // Check if this log is shown in the console
+  // Rest of your code
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const street = document.getElementById('street').value;
+      const address = document.getElementById('address').value;
+      const city = document.getElementById('city').value;
+      const state = document.getElementById('state').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+
+      try {
+        const db = firebase.firestore();
+        const user = firebase.auth().currentUser;
+        if (user) {
+          await db.collection('customers').add({
+            userId: user.uid,
+            firstName: firstName,
+            lastName: lastName,
+            street: street,
+            address: address,
+            city: city,
+            state: state,
+            email: email,
+            phone: phone
+            // Add more fields as needed
+          });
+          console.log('Customer added successfully');
+          // Redirect to customer list page
+          window.location.href = 'costumer.html';
+        }
+      } catch (error) {
+        console.error('Error adding customer:', error);
+      }
+    });
+  </script>
+</body>
+</html>

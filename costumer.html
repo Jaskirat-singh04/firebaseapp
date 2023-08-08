@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer Management System</title>
+  <link rel="stylesheet" href="constumer.css">
+  <script src="constumer.js"></script>
+</head>
+<body>
+  <div class="header">
+    <h1>Customer List</h1>
+    <button id="logout-button">Logout</button>
+  </div>
+  
+  <table id="customer-list">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Street</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Firebase Configuration Script -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+  <script>
+    // Your Firebase config
+    firebase.initializeApp({
+        apiKey: "AIzaSyC0xho1jzMKqvFZ4hF8bjctwdxvvxAhwzA",
+      authDomain: "authentication-3ca51.firebaseapp.com",
+      databaseURL: "https://authentication-3ca51-default-rtdb.firebaseio.com",
+      projectId: "authentication-3ca51",
+      storageBucket: "authentication-3ca51.appspot.com",
+      messagingSenderId: "424375942298",
+      appId: "1:424375942298:web:ebc8a196753b7328407323"
+    });
+
+    // Check if user is authenticated, otherwise redirect to login page
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = 'index.html'; // Redirect to login page
+      } else {
+        // Fetch and display customer list
+        const customerList = document.getElementById('customer-list');
+        const db = firebase.firestore();
+        
+        db.collection('customers').where('userId', '==', user.uid)
+  .get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${data.firstName} ${data.lastName}</td>
+        <td>${data.street}</td>
+        <td>${data.address}</td>
+        <td>${data.city}</td>
+        <td>${data.state}</td>
+        <td>${data.email}</td>
+        <td>${data.phone}</td>
+        <td><button data-id="${doc.id}" class="edit-button">Edit</button>
+          <button data-id="${doc.id}" class="delete-button">Delete</button></td>
+      `;
+              customerList.appendChild(row);
+              const editButton = row.querySelector('.edit-button');
+      editButton.addEventListener('click', () => {
+        // Handle edit functionality here
+        // For example, redirect to an edit page with the customer's ID
+        window.location.href = `index.html?id=${doc.id}`;
+      });
+
+              // Add event listener for delete button
+              const deleteButton = row.querySelector('.delete-button');
+              deleteButton.addEventListener('click', async () => {
+                await db.collection('customers').doc(doc.id).delete();
+                row.remove();
+                
+              });
+            });
+          })
+          .catch((error) => {
+            console.error('Error getting customer list:', error);
+          });
+      }
+    });
+
+    // Logout button functionality
+    const logoutButton = document.getElementById('logout-button');
+    logoutButton.addEventListener('click', () => {
+      firebase.auth().signOut();
+    });
+  </script>
+</body>
+</html>
